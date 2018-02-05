@@ -1,23 +1,29 @@
 const numbers = document.querySelectorAll('.numbers');
 const operations = document.querySelectorAll('.ops');
 
-const ops = "+x-/";
+const ops = "+*-/";
 
 const equal = document.querySelector('.equals');
 const clear = document.querySelector('.clear');
 const back = document.querySelector('.back');
+const decimal = document.querySelector('.decimal');
 
 const display = document.querySelector('.display');
 
 numbers.forEach((number) =>{
 	number.addEventListener('click', (e) => {
+		if (display.textContent == "ERROR"){
+			display.textContent = "";
+		}
 		display.textContent += number.textContent;
 	})
 });
 
 operations.forEach((operation) =>{
 	operation.addEventListener('click', (e) => {
-		//check if last char in display an operator (ie x/+)
+		if (display.textContent == "ERROR"){
+			display.textContent = "";
+		}
 		display.textContent += operation.textContent;
 	})
 });
@@ -31,6 +37,13 @@ back.addEventListener('click', (e) =>{
 	display.textContent = display.textContent.slice(0, display.textContent.length - 1);
 });
 
+decimal.addEventListener('click', (e) =>{
+	stringOperations = display.textContent.match(/[^\d()]+|[\d.]+/g);
+	if(stringOperations[stringOperations.length -1].indexOf(".") == -1){
+		display.textContent += ".";
+	}
+});
+
 equal.addEventListener('click', (e) =>{
 	stringOperations = display.textContent.match(/[^\d()]+|[\d.]+/g);
 	let product = 0;
@@ -40,9 +53,19 @@ equal.addEventListener('click', (e) =>{
 			let op = stringOperations[i];
 			let num1 = +stringOperations[i-1];
 			let num2 = +stringOperations[i+1];
+			if(op == "/" && num2 == 0){
+				product = "ERROR";
+				break;
+			}
 			product += operate(op, num1, num2);
 		}
 	}
+
+	//incase of = before finishing operation
+	if(stringOperations.length < 3){
+		product = display.textContent;
+	}
+
 	display.textContent = product;
 });
 
@@ -59,7 +82,7 @@ function multiply(num1, num2){
 }
 
 function divide(num1, num2){
-	return num1 / num2; //to the 10th decimal place
+	return +(num1 / num2).toFixed(7); 
 }
 
 function operate(ops, num1, num2){
@@ -68,7 +91,7 @@ function operate(ops, num1, num2){
 		return add(num1, num2);
 	}else if(ops == "-"){
 		return subtract(num1, num2);
-	}else if(ops == "x"){
+	}else if(ops == "*"){
 		return multiply(num1, num2);
 	}else if(ops == "/"){
 		return divide(num1, num2);

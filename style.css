@@ -31,7 +31,7 @@ button {
 	height: 70px;
 	margin-top: 5px;
 	font-size: 20px;
-	font-family: Helvetica, Arial, sans-serif;
+	font-family:Arial, sans-serif;
 	font-weight: bold;
 	border-radius: 0;
 	border: 1px solid #bfc9ca;
@@ -55,4 +55,16 @@ button:hover{
 .equals{
 	background-color: #3498db;
 	color: white;
+}
+
+.back{
+	width: 195px;
+	height: 70px;
+	font-size: 17px;
+}
+
+.clear{
+	width: 195px;
+	height: 70px;
+	font-size: 17px;
 }
