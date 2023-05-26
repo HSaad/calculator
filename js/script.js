@@ -1,5 +1,5 @@
 let operator = "";
-let number1 = "";
+let number1 = "0";
 let number2 = "";
 
 function add(num1, num2){
@@ -69,65 +69,38 @@ function setOperator(operatorElement){
     operator = operatorElement.target.id
 }
 
+function setOperatorFunction(e){
+    if(number2 != "" ){
+        clearDisplay();
+        number1 = operate(operator, +number1, +number2);
+        updateDisplay(number1);
+
+    }
+    setOperator(e)
+    number2 = `${number1}`;
+    number1 = "0"
+    updateDisplayOperator(e);
+}
+
 function calculator(){
     let add = document.querySelector("#add");
     let subtract = document.querySelector("#subtract");
     let multiply = document.querySelector("#multiply");
     let divide = document.querySelector("#divide");
+    let clear = document.querySelector("#clear");
 
-    add.addEventListener("click", (e) => {
-        if(number2 != ""){
-            clearDisplay();
-            number1 = operate(operator, +number1, +number2);
-            updateDisplay(number1);
+    add.addEventListener("click", (e) => setOperatorFunction(e));
+    subtract.addEventListener("click", (e) => setOperatorFunction(e));
+    multiply.addEventListener("click", (e) => setOperatorFunction(e));
+    divide.addEventListener("click", (e) => setOperatorFunction(e));
 
-        }
-        setOperator(e)
-        number2 = number1;
-        number1 = ""
-        updateDisplayOperator(e);
-    });
-
-    subtract.addEventListener("click", (e) => {
-        if(number2 != ""){
-            clearDisplay();
-            console.log(number1);
-            console.log(number2);
-            number1 = operate(operator, +number1, +number2);
-            updateDisplay(number1);
-        }
-        setOperator(e)
-        number2 = number1;
-        number1 = ""
-        updateDisplayOperator(e);
-    });
-
-    multiply.addEventListener("click", (e) => {
-        if(number2 != ""){
-            clearDisplay();
-            number1 = operate(operator, +number1, +number2);
-            updateDisplay(number1);
-
-        }
-        setOperator(e)
-        number2 = number1;
-        number1 = ""
-        updateDisplayOperator(e);
-    });
-
-    divide.addEventListener("click", (e) => {
-        if(number2 != ""){
-            clearDisplay();
-            console.log(number1);
-            console.log(number2);
-            number1 = operate(operator, +number1, +number2);
-            updateDisplay(number1);
-        }
-        setOperator(e)
-        number2 = number1;
-        number1 = ""
-        updateDisplayOperator(e);
-    });
+    clear.addEventListener("click", (e) => {
+        clearDisplay();
+        operator = "";
+        number1 = "0";
+        number2 = ""
+        updateDisplay("0");
+    })
 
     setDigitFunction();
 }
