@@ -15,7 +15,7 @@ function multiply(num1, num2){
 }
 
 function divide(num1, num2){
-    return num1 / num2;
+    return num2 / num1;
 }
 
 function operate(operator, num1, num2){
@@ -102,6 +102,32 @@ function calculator(){
         updateDisplayOperator(e);
     });
 
+    multiply.addEventListener("click", (e) => {
+        if(number2 != ""){
+            clearDisplay();
+            number1 = operate(operator, +number1, +number2);
+            updateDisplay(number1);
+
+        }
+        setOperator(e)
+        number2 = number1;
+        number1 = ""
+        updateDisplayOperator(e);
+    });
+
+    divide.addEventListener("click", (e) => {
+        if(number2 != ""){
+            clearDisplay();
+            console.log(number1);
+            console.log(number2);
+            number1 = operate(operator, +number1, +number2);
+            updateDisplay(number1);
+        }
+        setOperator(e)
+        number2 = number1;
+        number1 = ""
+        updateDisplayOperator(e);
+    });
 
     setDigitFunction();
 }
