@@ -7,7 +7,7 @@ function add(num1, num2){
 }
 
 function subtract(num1, num2){
-    return num1 - num2;
+    return num2 - num1;
 }
 
 function multiply(num1, num2){
@@ -22,11 +22,11 @@ function operate(operator, num1, num2){
     switch(operator){
         case "add":
             return add(num1, num2);
-        case "-":
+        case "subtract":
             return subtract(num1, num2);
-        case "*":
+        case "multiply":
             return multiply(num1, num2);
-        case "/":
+        case "divide":
             return divide(num1, num2);
         default:
             return "Invalid operation";
@@ -76,17 +76,32 @@ function calculator(){
     let divide = document.querySelector("#divide");
 
     add.addEventListener("click", (e) => {
-        setOperator(e)
         if(number2 != ""){
             clearDisplay();
-            number1 = operate("add", +number1, +number2);
+            number1 = operate(operator, +number1, +number2);
             updateDisplay(number1);
 
         }
+        setOperator(e)
         number2 = number1;
         number1 = ""
         updateDisplayOperator(e);
     });
+
+    subtract.addEventListener("click", (e) => {
+        if(number2 != ""){
+            clearDisplay();
+            console.log(number1);
+            console.log(number2);
+            number1 = operate(operator, +number1, +number2);
+            updateDisplay(number1);
+        }
+        setOperator(e)
+        number2 = number1;
+        number1 = ""
+        updateDisplayOperator(e);
+    });
+
 
     setDigitFunction();
 }
