@@ -35,6 +35,7 @@ function operate(operator, num1, num2){
 
 function updateDisplay(displayText){
     let display = document.querySelector(".display");
+
     if (display.textContent == "0" || display.textContent == ""){
         display.textContent = displayText;
     } else {
@@ -49,19 +50,27 @@ function clearDisplay(){
 
 function updateDisplayOperator(operatorElement){
     let display = document.querySelector(".display");
-    display.textContent += operatorElement.target.textContent;
+    display.textContent += ` ${operatorElement.target.textContent} `;
 }
 
 function setNumber(digitElement){
-    number1 += digitElement.target.value;
+    if(number1 == "0"){
+        number1 = digitElement.target.value;
+    }else {
+        number1 += digitElement.target.value;   
+    }
 }
 
 
 function setDigitFunction(){
     let digits = document.querySelectorAll(".digit");
     digits.forEach(digit => digit.addEventListener("click", e => {
-        setNumber(e)
-        updateDisplay(e.target.value);
+        if(e.target.value == "." && number1.includes(".")){
+            return
+        }else {
+            setNumber(e)
+            updateDisplay(e.target.value);
+        }
     }));
 }
 
@@ -70,37 +79,71 @@ function setOperator(operatorElement){
 }
 
 function setOperatorFunction(e){
-    if(number2 != "" ){
+    if(number2 != "" && number1 != "0"){
         clearDisplay();
         number1 = operate(operator, +number1, +number2);
         updateDisplay(number1);
-
     }
-    setOperator(e)
     number2 = `${number1}`;
     number1 = "0"
-    updateDisplayOperator(e);
+
+    if( e.target.textContent != "="){
+        setOperator(e)
+        updateDisplayOperator(e);
+    }else {
+        number1 = number2;
+        number2 = "";
+    }
+}
+
+function setClearFunction(){
+    clearDisplay();
+    operator = "";
+    number1 = "0";
+    number2 = ""
+    updateDisplay("0");
+}
+
+function setDeleteFunction(){
+    let display = document.querySelector(".display").textContent
+    let displayText = display.trim();
+    let lastChar = displayText[displayText.length - 1];
+
+    if(lastChar == "+" ||
+        lastChar == "x" ||
+        lastChar == "-" ||
+        lastChar == "/"){
+            number1 = number2;
+            number2 = "";
+            operator = ""
+            clearDisplay();
+            updateDisplay(displayText.slice(0,-1));
+    }
+    else{
+        number1 = number1.slice(0, -1) == "" ? "0" : number1.slice(0, -1);
+        clearDisplay();
+        updateDisplay(displayText.slice(0,-1));
+    }
 }
 
 function calculator(){
-    let add = document.querySelector("#add");
-    let subtract = document.querySelector("#subtract");
-    let multiply = document.querySelector("#multiply");
-    let divide = document.querySelector("#divide");
-    let clear = document.querySelector("#clear");
+    let addButton = document.querySelector("#add");
+    let subtractButton = document.querySelector("#subtract");
+    let multiplyButton = document.querySelector("#multiply");
+    let divideButton = document.querySelector("#divide");
+    let equalButton = document.querySelector("#enter");
 
-    add.addEventListener("click", (e) => setOperatorFunction(e));
-    subtract.addEventListener("click", (e) => setOperatorFunction(e));
-    multiply.addEventListener("click", (e) => setOperatorFunction(e));
-    divide.addEventListener("click", (e) => setOperatorFunction(e));
+    let clearButton = document.querySelector("#clear");
+    let deleteButton = document.querySelector("#delete");
 
-    clear.addEventListener("click", (e) => {
-        clearDisplay();
-        operator = "";
-        number1 = "0";
-        number2 = ""
-        updateDisplay("0");
-    })
+    addButton.addEventListener("click", (e) => setOperatorFunction(e));
+    subtractButton.addEventListener("click", (e) => setOperatorFunction(e));
+    multiplyButton.addEventListener("click", (e) => setOperatorFunction(e));
+    divideButton.addEventListener("click", (e) => setOperatorFunction(e));
+    equalButton.addEventListener("click", (e) => setOperatorFunction(e));
+
+    clearButton.addEventListener("click", setClearFunction);
+    deleteButton.addEventListener("click", setDeleteFunction);
 
     setDigitFunction();
 }
