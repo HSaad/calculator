@@ -1,3 +1,4 @@
+let display = document.querySelector(".display");
 let operator = "";
 let number1 = "0";
 let number2 = "";
@@ -34,8 +35,6 @@ function operate(operator, num1, num2){
 }
 
 function updateDisplay(displayText){
-    let display = document.querySelector(".display");
-
     if (display.textContent == "0" || display.textContent == ""){
         display.textContent = displayText;
     } else {
@@ -44,12 +43,10 @@ function updateDisplay(displayText){
 }
 
 function clearDisplay(){
-    let display = document.querySelector(".display");
     display.textContent = "";
 }
 
 function updateDisplayOperator(operatorElement){
-    let display = document.querySelector(".display");
     display.textContent += ` ${operatorElement.target.textContent} `;
 }
 
@@ -60,7 +57,6 @@ function setNumber(digitElement){
         number1 += digitElement.target.value;   
     }
 }
-
 
 function setDigitFunction(){
     let digits = document.querySelectorAll(".digit");
@@ -79,20 +75,20 @@ function setOperator(operatorElement){
 }
 
 function setOperatorFunction(e){
-    if(number2 != "" && number1 != "0"){
+    if(number2 != "" && number1 != ""){
         clearDisplay();
         number1 = operate(operator, +number1, +number2);
+        operator = ""
         updateDisplay(number1);
     }
-    number2 = `${number1}`;
-    number1 = "0"
+    if(number1 != ""){
+        number2 = `${number1}`;
+        number1 = ""
+    }
 
-    if( e.target.textContent != "="){
+    if( e.target.textContent != "=" && operator == ""){
         setOperator(e)
         updateDisplayOperator(e);
-    }else {
-        number1 = number2;
-        number2 = "";
     }
 }
 
@@ -105,8 +101,7 @@ function setClearFunction(){
 }
 
 function setDeleteFunction(){
-    let display = document.querySelector(".display").textContent
-    let displayText = display.trim();
+    let displayText = display.textContent.trim();
     let lastChar = displayText[displayText.length - 1];
 
     if(lastChar == "+" ||
@@ -121,8 +116,9 @@ function setDeleteFunction(){
     }
     else{
         number1 = number1.slice(0, -1) == "" ? "0" : number1.slice(0, -1);
+        text = displayText.slice(0,-1) == "" ? "0" : displayText.slice(0,-1);
         clearDisplay();
-        updateDisplay(displayText.slice(0,-1));
+        updateDisplay(text);
     }
 }
 
