@@ -77,6 +77,8 @@ function setOperator(operatorElement){
 }
 
 function setOperatorFunction(e){
+    if (display.textContent == "ERROR") return;
+    
     if(number2 != "" && number1 != ""){
         clearDisplay();
         number1 = operate(operator, +number1, +number2);
@@ -88,12 +90,13 @@ function setOperatorFunction(e){
         }
         updateDisplay(number1);
     }
+
     if(number1 != ""){
         number2 = `${number1}`;
         number1 = ""
     }
 
-    if( e.target.textContent != "=" && operator == ""){
+    if(e.target.textContent != "=" && operator == ""){
         setOperator(e)
         updateDisplayOperator(e);
     }
