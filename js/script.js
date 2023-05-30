@@ -52,24 +52,26 @@ function updateDisplayOperator(operatorElement){
     } 
 }
 
-function setNumber(digitElement){
+function setNumber(digit){
     if(number1 == "0"){
-        number1 = digitElement.target.value;
+        number1 = digit;
     }else {
-        number1 += digitElement.target.value;   
+        number1 += digit;   
+    }
+}
+
+function setDigit(digit){
+    if(digit == "." && number1.includes(".")){
+        return
+    }else {
+        setNumber(digit)
+        updateDisplay(digit);
     }
 }
 
 function setDigitFunction(){
     let digits = document.querySelectorAll(".digit");
-    digits.forEach(digit => digit.addEventListener("click", e => {
-        if(e.target.value == "." && number1.includes(".")){
-            return
-        }else {
-            setNumber(e)
-            updateDisplay(e.target.value);
-        }
-    }));
+    digits.forEach(digit => digit.addEventListener("click", e => setDigit(e.target.value)));
 }
 
 function setOperator(operatorElement){
@@ -78,7 +80,7 @@ function setOperator(operatorElement){
 
 function setOperatorFunction(e){
     if (display.textContent == "ERROR") return;
-    
+
     if(number2 != "" && number1 != ""){
         clearDisplay();
         number1 = operate(operator, +number1, +number2);
@@ -99,6 +101,9 @@ function setOperatorFunction(e){
     if(e.target.textContent != "=" && operator == ""){
         setOperator(e)
         updateDisplayOperator(e);
+    }else if(e.target.textContent == "="){
+        number1 = `${number2}`;
+        number2 = ""
     }
 }
 
@@ -134,6 +139,27 @@ function setDeleteFunction(){
     }
 }
 
+function getKeyboardDigits(){
+    document.addEventListener('keypress', (event) => {
+        var name = event.key;
+        if(!isNaN(name) && name != " "){
+            setDigit(name);
+        }else if (name == "."){
+            setDigit(name);
+        }else if (name == "+"){
+            document.getElementById("add").click();
+        } else if (name == "-"){
+            document.getElementById("subtract").click();
+        }else if (name == "x" || name == "*"){
+            document.getElementById("multiply").click();
+        } else if (name == "/"){
+            document.getElementById("divide").click();
+        } else if (name == "=" || name == "Enter"){
+            document.getElementById("enter").click();
+        }
+    }, false);
+}
+
 function calculator(){
     let addButton = document.querySelector("#add");
     let subtractButton = document.querySelector("#subtract");
@@ -154,6 +180,7 @@ function calculator(){
     deleteButton.addEventListener("click", setDeleteFunction);
 
     setDigitFunction();
+    getKeyboardDigits();
 }
 
 calculator();
