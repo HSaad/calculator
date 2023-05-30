@@ -35,7 +35,7 @@ function operate(operator, num1, num2){
 }
 
 function updateDisplay(displayText){
-    if (display.textContent == "0" || display.textContent == ""){
+    if (display.textContent == "0" || display.textContent == "" || display.textContent == "ERROR"){
         display.textContent = displayText;
     } else {
         display.textContent += displayText;
@@ -47,7 +47,9 @@ function clearDisplay(){
 }
 
 function updateDisplayOperator(operatorElement){
-    display.textContent += ` ${operatorElement.target.textContent} `;
+    if (display.textContent != "" && display.textContent != "ERROR"){
+        display.textContent += ` ${operatorElement.target.textContent} `;
+    } 
 }
 
 function setNumber(digitElement){
@@ -79,6 +81,11 @@ function setOperatorFunction(e){
         clearDisplay();
         number1 = operate(operator, +number1, +number2);
         operator = ""
+        if(number1 == "Infinity" || number1 == "-Infinity"){
+            setClearFunction();
+            updateDisplay("ERROR");
+            return
+        }
         updateDisplay(number1);
     }
     if(number1 != ""){
@@ -103,6 +110,8 @@ function setClearFunction(){
 function setDeleteFunction(){
     let displayText = display.textContent.trim();
     let lastChar = displayText[displayText.length - 1];
+
+    if(displayText == "ERROR") return;
 
     if(lastChar == "+" ||
         lastChar == "x" ||
